@@ -401,10 +401,8 @@ a.card:hover .card-go { color: var(--accent-dark); }
 
 /* ═══════════════ BUSCA ═══════════════ */
 .search { position: relative; max-width: 480px; margin-bottom: 26px; }
-.search-ico { position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-              width: 18px; height: 18px; color: var(--text-faint); pointer-events: none; }
 .search-input {
-    width: 100%; height: 50px; padding: 0 16px 0 46px;
+    width: 100%; height: 50px; padding: 0 16px;
     font: inherit; font-size: .95rem; color: var(--text);
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm);
     transition: border-color var(--t), box-shadow var(--t);
