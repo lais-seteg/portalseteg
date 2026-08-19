@@ -62,9 +62,29 @@
     --t: 220ms var(--ease);
 
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --hdr-h: 68px;
-    --pad-x: clamp(20px, 5vw, 72px);
-    --wrap: 1200px;
+
+    /* ─── Métricas fluidas ───
+       As medidas de estrutura escalam com a largura da janela em vez de pular
+       em breakpoints: de 320px a 4K o layout muda de forma contínua, sem
+       nenhum tamanho de tela "não previsto". */
+    --hdr-h:    clamp(58px, 1.6vw + 52px, 72px);
+    --pad-x:    clamp(16px, 4.5vw, 72px);
+    --wrap:     1240px;
+    --sec-y:    clamp(48px, 7vw, 104px);    /* respiro vertical das seções */
+    --gap:      clamp(14px, 1.6vw, 20px);   /* espaço entre cards */
+    --card-min: 268px;                      /* largura mínima de um card */
+}
+
+/* Telas muito largas: em vez de deixar duas faixas vazias nas laterais, o
+   contêiner e os cards crescem junto com a janela — e o rem sobe com eles,
+   para o texto não virar uma linha fina no meio de um monitor de 4K. */
+@media (min-width: 1700px) {
+    :root { --wrap: 1480px; --card-min: 300px; }
+    html { font-size: 106.25%; }   /* 17px */
+}
+@media (min-width: 2200px) {
+    :root { --wrap: 1760px; --card-min: 330px; }
+    html { font-size: 112.5%; }    /* 18px */
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -80,10 +100,12 @@ body {
     font-family: var(--font);
     background: var(--background);
     color: var(--text);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    /* Nenhuma palavra longa (e-mail, URL) pode empurrar a largura da página. */
+    overflow-wrap: break-word;
 }
 
 img { max-width: 100%; display: block; }
@@ -92,7 +114,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round; }
 
-.wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad-x); }
+/* O padding lateral respeita o recorte da tela (notch, barra de gestos) em
+   celulares, sem encostar o conteúdo na borda em nenhuma orientação. */
+.wrap {
+    width: 100%; max-width: var(--wrap); margin: 0 auto;
+    padding-left:  max(var(--pad-x), env(safe-area-inset-left));
+    padding-right: max(var(--pad-x), env(safe-area-inset-right));
+}
 
 /* Acessibilidade: foco sempre visível e atalho para o conteúdo. */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
@@ -147,7 +175,8 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
    para separar do conteúdo, sem virar uma barra pesada. */
 .hdr.is-stuck { border-bottom-color: var(--border); box-shadow: 0 1px 12px rgba(7,29,73,.05); }
 
-.hdr-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.hdr-inner { height: 100%; display: flex; align-items: center; justify-content: space-between;
+             gap: clamp(12px, 2vw, 24px); }
 
 .brand { display: inline-flex; align-items: center; gap: 11px; flex: 0 0 auto; }
 .brand-mark { width: 32px; height: 32px; border-radius: var(--r-sm); object-fit: contain; }
@@ -190,7 +219,11 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 
 .mnav {
     position: fixed; top: 0; right: 0; bottom: 0; z-index: 120;
-    width: min(320px, 86vw); padding: 20px;
+    width: min(320px, 86vw);
+    /* Rola sozinho e desvia do notch quando a tela é curta ou está deitada. */
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+             max(20px, env(safe-area-inset-bottom)) 20px;
+    overflow-y: auto; overscroll-behavior: contain;
     background: var(--surface); box-shadow: var(--sh-lg);
     display: flex; flex-direction: column; gap: 4px;
     transform: translateX(100%); transition: transform 260ms var(--ease);
@@ -209,7 +242,8 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 .mnav-link:hover, .mnav-link.is-active { background: var(--surface-hover); color: var(--primary); font-weight: 600; }
 
 /* ═══════════════ HERO ═══════════════ */
-.hero { padding: calc(var(--hdr-h) + 72px) 0 96px; position: relative; overflow: hidden; }
+.hero { padding: calc(var(--hdr-h) + clamp(32px, 5.5vw, 80px)) 0 clamp(56px, 7vw, 104px);
+        position: relative; overflow: hidden; }
 /* Halo discretíssimo atrás do conteúdo — dá profundidade sem virar
    gradiente chamativo. */
 .hero::before {
@@ -219,7 +253,7 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 }
 .hero-grid {
     position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-    gap: 64px; align-items: center;
+    gap: clamp(32px, 4.5vw, 64px); align-items: center;
 }
 
 .badge {
@@ -238,7 +272,7 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
     max-width: 15ch;
 }
 .hero-sub { font-size: clamp(1rem, 1.4vw, 1.125rem); color: var(--text-muted); max-width: 52ch; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(24px, 3.4vw, 36px); }
 
 /* ─── Composição visual (mockup em CSS) ─── */
 .hero-visual { position: relative; }
@@ -256,14 +290,14 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 .mock-bar span { flex: 1; height: 8px; margin-left: 10px; border-radius: 4px; background: var(--border); }
 
 .mock-body { padding: 18px; display: grid; gap: 16px; }
-.mock-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.mock-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .mock-tile { padding: 14px 12px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); }
-.mock-tile b { display: block; font-size: 1.75rem; font-weight: 800; color: var(--primary);
+.mock-tile b { display: block; font-size: clamp(1.3rem, 2.1vw, 1.75rem); font-weight: 800; color: var(--primary);
                letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
 .mock-tile span { display: block; margin-top: 6px; font-size: .68rem; font-weight: 500;
                   line-height: 1.3; color: var(--text-muted); }
 
-.mock-chart { display: flex; align-items: flex-end; gap: 8px; height: 92px;
+.mock-chart { display: flex; align-items: flex-end; gap: 8px; height: clamp(84px, 5.5vw, 108px);
               padding: 12px; border: 1px solid var(--border); border-radius: var(--r-md); }
 .mock-chart span { flex: 1; height: var(--h); border-radius: 3px 3px 0 0;
                    background: linear-gradient(180deg, var(--primary-light), var(--primary)); opacity: .82; }
@@ -280,10 +314,10 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 
 
 /* ═══════════════ SEÇÕES ═══════════════ */
-.sec { padding: 84px 0; }
+.sec { padding: var(--sec-y) 0; }
 .sec-alt { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
-.sec-head { max-width: 60ch; margin-bottom: 36px; }
+.sec-head { max-width: 60ch; margin-bottom: clamp(24px, 3vw, 40px); }
 .eyebrow { display: block; margin-bottom: 12px; font-size: .74rem; font-weight: 700;
            letter-spacing: .12em; text-transform: uppercase; color: var(--accent-dark); }
 .sec-title { font-size: clamp(1.75rem, 3.2vw, 2.4rem); font-weight: 800;
@@ -291,11 +325,17 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 .sec-sub { margin-top: 12px; font-size: 1.0625rem; color: var(--text-muted); }
 
 /* ═══════════════ CARDS ═══════════════ */
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 18px; }
+/* O min() garante que um card nunca fique mais largo que o contêiner: é o que
+   impede o estouro horizontal em telas abaixo de 300px. */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--card-min), 100%), 1fr));
+    gap: var(--gap);
+}
 
 .card {
     position: relative; display: flex; flex-direction: column;
-    padding: 24px; background: var(--surface);
+    padding: clamp(18px, 2vw, 26px); background: var(--surface);
     border: 1px solid var(--border); border-radius: var(--r-lg);
     box-shadow: var(--sh-sm);
     transition: transform var(--t), box-shadow var(--t), border-color var(--t);
@@ -345,7 +385,8 @@ a.card:hover .card-go { color: var(--accent-dark); }
 
 /* ═══════════════ CARD DE DESTAQUE (Avaliações) ═══════════════ */
 .feature {
-    display: flex; align-items: center; gap: 24px; padding: 30px 32px;
+    display: flex; align-items: center; gap: clamp(18px, 2.2vw, 24px);
+    padding: clamp(22px, 2.6vw, 32px);
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
     box-shadow: var(--sh-sm);
     transition: transform var(--t), box-shadow var(--t), border-color var(--t);
@@ -372,7 +413,8 @@ a.card:hover .card-go { color: var(--accent-dark); }
 .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,130,0,.13); }
 
 /* ═══════════════ FOOTER ═══════════════ */
-.ftr { background: var(--primary); color: rgba(255,255,255,.7); padding: 54px 0 0; }
+.ftr { background: var(--primary); color: rgba(255,255,255,.7);
+       padding: clamp(40px, 5vw, 60px) 0 0; }
 .ftr-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; padding-bottom: 40px; }
 .ftr .brand-text strong { color: #fff; }
 .ftr .brand-text span { color: rgba(255,255,255,.55); }
@@ -402,34 +444,69 @@ a.card:hover .card-go { color: var(--accent-dark); }
 .js .reveal.is-in { opacity: 1; transform: none; transition: opacity .55s var(--ease), transform .55s var(--ease); }
 
 /* ═══════════════ RESPONSIVO ═══════════════ */
+/* Os tokens fluidos do :root já cobrem espaçamento e tipografia em qualquer
+   largura. O que sobra aqui é só o que muda de estrutura — número de colunas,
+   menu de navegação — e os extremos: telas estreitíssimas e telas baixas. */
+
+/* ─── Tablet em pé: o hero passa a uma coluna ─── */
 @media (max-width: 1080px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
     .hero-title { max-width: 20ch; }
-    .hero-visual { max-width: 560px; }
+    .hero-visual { width: 100%; max-width: 560px; margin-inline: auto; }
 }
 
+/* ─── A navegação horizontal não cabe mais: vira menu lateral ─── */
 @media (max-width: 900px) {
     .hdr-nav { display: none; }
     .burger { display: flex; }
-    .hero { padding-top: calc(var(--hdr-h) + 48px); }
-    .sec { padding: 64px 0; }
-    .feature { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .feature { flex-direction: column; align-items: flex-start; }
     .feature-btn { width: 100%; }
 }
 
+/* ─── Celular em pé ─── */
 @media (max-width: 640px) {
-    .hero { padding-top: calc(var(--hdr-h) + 36px); padding-bottom: 56px; }
+    .hero-title { max-width: none; }
     .hero-actions { gap: 10px; }
-    .hero-actions .btn { flex: 1 1 100%; }
+    .hero-actions .btn { flex: 1 1 100%; }   /* botões empilhados, largura cheia */
     .cards { grid-template-columns: 1fr; }
-    .mock-tiles { grid-template-columns: 1fr; }
+    .mock-tiles { grid-template-columns: 1fr; }   /* três números empilhados */
     .ftr-top { flex-direction: column; gap: 28px; }
+    .search { max-width: none; }
     /* Alvos de toque confortáveis. */
     .mnav-link { padding: 16px 14px; }
 }
 
-@media (max-width: 380px) {
-    :root { --pad-x: 16px; }
+/* ─── Telas estreitas: celulares pequenos e janelas divididas ─── */
+@media (max-width: 420px) {
+    .brand-text span { display: none; }      /* mantém só a marca */
+    .badge { font-size: .68rem; padding: 5px 12px 5px 9px; }
+    .btn { padding: 12px 16px; }
+    .search-input { height: 46px; }
+    .feature .card-ico { width: 48px; height: 48px; }
+}
+
+/* ─── Abaixo disso cada pixel de largura conta ─── */
+@media (max-width: 340px) {
+    .card-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ftr-legal { flex-direction: column; gap: 4px; }
+    .ftr-sep { display: none; }
+}
+
+/* ─── Telas baixas: celular deitado, janela redimensionada ───
+   Sem isto o hero ocupa a altura inteira só com o título e nada mais aparece
+   sem rolar. */
+@media (max-height: 560px) and (orientation: landscape) {
+    .hero { padding-top: calc(var(--hdr-h) + 24px); padding-bottom: 40px; }
+    .sec { padding: 44px 0; }
+    .mock { animation: none; }
+    .mnav-link { padding: 11px 14px; }
+    .mnav-head { margin-bottom: 6px; }
+}
+
+/* Nessas telas o hero já está em uma coluna: o mockup (decorativo) só
+   empurraria o conteúdo real para fora da tela. */
+@media (max-height: 560px) and (orientation: landscape) and (max-width: 1080px) {
+    .hero-visual { display: none; }
 }
 
 /* ═══════════════ MOVIMENTO REDUZIDO ═══════════════ */
