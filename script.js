@@ -165,35 +165,4 @@
         secoes.forEach(function (s) { obs.observe(s); });
     })();
 
-    /* ─── 6. Busca de setores no suporte ─── */
-    (function busca() {
-        var campo = document.getElementById('supportSearch');
-        var grade = document.getElementById('supportGrid');
-        var vazio = document.getElementById('supportEmpty');
-        if (!campo || !grade) return;
-
-        var cards = grade.querySelectorAll('.card');
-
-        // Sem acento e em minúsculas, para "biotico" achar "Biótico".
-        function normalizar(s) {
-            return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-        }
-
-        var timer;
-        campo.addEventListener('input', function () {
-            window.clearTimeout(timer);
-            timer = window.setTimeout(function () {
-                var termo = normalizar(campo.value.trim());
-                var visiveis = 0;
-                cards.forEach(function (card) {
-                    var chave = normalizar(card.getAttribute('data-q') + ' ' + card.textContent);
-                    var mostra = !termo || chave.indexOf(termo) !== -1;
-                    card.hidden = !mostra;
-                    if (mostra) visiveis++;
-                });
-                if (vazio) vazio.hidden = visiveis > 0;
-            }, 120);
-        });
-    })();
-
 })();
