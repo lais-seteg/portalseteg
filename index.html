@@ -3,354 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal SETEG</title>
+    <title>Portal SETEG · Sistemas e Solicitações</title>
+    <meta name="description" content="Portal interno da SETEG: sistemas de solicitação, avaliações, manuais e canais de suporte em um só lugar.">
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <img src="images/favicon.png" alt="SETEG" class="sidebar-logo-img" onerror="this.style.display='none'">
-                <span>Portal SETEG</span>
+<a class="skip-link" href="#main">Pular para o conteúdo</a>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="hdr" id="hdr">
+    <div class="wrap hdr-inner">
+        <a class="brand" href="#home" aria-label="Portal SETEG — início">
+            <img src="images/favicon.png" alt="" class="brand-mark" aria-hidden="true" onerror="this.style.display='none'">
+            <span class="brand-text"><strong>SETEG</strong><span>Portal Interno</span></span>
+        </a>
+
+        <nav class="hdr-nav" aria-label="Navegação principal">
+            <a href="#home"       class="nav-link is-active" data-spy="home">Início</a>
+            <a href="#systems"    class="nav-link" data-spy="systems">Solicitações</a>
+            <a href="#avaliacoes" class="nav-link" data-spy="avaliacoes">Avaliações</a>
+            <a href="#manuals"    class="nav-link" data-spy="manuals">Manuais</a>
+            <a href="#support"    class="nav-link" data-spy="support">Suporte</a>
+        </nav>
+
+        <div class="hdr-actions">
+            <button class="burger" id="burger" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobileNav">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="scrim" id="scrim" hidden></div>
+<nav class="mnav" id="mobileNav" aria-label="Navegação principal" hidden>
+    <div class="mnav-head">
+        <span class="mnav-title">Navegação</span>
+        <button class="mnav-close" id="mnavClose" aria-label="Fechar menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+    <a href="#home"       class="mnav-link" data-spy="home">Início</a>
+    <a href="#systems"    class="mnav-link" data-spy="systems">Solicitações</a>
+    <a href="#avaliacoes" class="mnav-link" data-spy="avaliacoes">Avaliações</a>
+    <a href="#manuals"    class="mnav-link" data-spy="manuals">Manuais</a>
+    <a href="#support"    class="mnav-link" data-spy="support">Suporte</a>
+</nav>
+
+<main id="main">
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero" id="home">
+        <div class="wrap hero-grid">
+            <div class="hero-copy">
+                <span class="badge"><span class="badge-dot" aria-hidden="true"></span> Portal interno SETEG</span>
+                <h1 class="hero-title">Todos os sistemas da SETEG em um só lugar.</h1>
+                <p class="hero-sub">Centralize solicitações, sistemas, avaliações, manuais e canais de suporte em uma única plataforma.</p>
+                <div class="hero-actions">
+                    <a href="#systems" class="btn btn-primary">
+                        Acessar sistemas
+                        <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="#manuals" class="btn btn-ghost">Ver manuais</a>
+                    <a href="#support" class="btn btn-ghost">Solicitar suporte</a>
+                </div>
+            </div>
+
+            <!-- Composição abstrata do próprio portal, desenhada em CSS: nítida
+                 em qualquer tela, sem download de imagem. -->
+            <div class="hero-visual">
+                <div class="mock">
+                    <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+                    <div class="mock-body">
+                        <div class="mock-tiles">
+                            <div class="mock-tile">
+                                <b class="metric-num" data-count="10">00</b>
+                                <span>Sistemas integrados</span>
+                            </div>
+                            <div class="mock-tile">
+                                <b class="metric-num" data-count="1">00</b>
+                                <span>Manual disponível</span>
+                            </div>
+                            <div class="mock-tile">
+                                <b class="metric-num" data-count="9">00</b>
+                                <span>Canais de suporte</span>
+                            </div>
+                        </div>
+                        <div class="mock-chart" aria-hidden="true">
+                            <span style="--h:38%"></span><span style="--h:62%"></span><span style="--h:47%"></span>
+                            <span style="--h:80%"></span><span style="--h:55%"></span><span style="--h:70%"></span><span style="--h:92%"></span>
+                        </div>
+                        <div class="mock-rows" aria-hidden="true">
+                            <div class="mock-row"><i></i><span></span><em></em></div>
+                            <div class="mock-row"><i></i><span></span><em></em></div>
+                            <div class="mock-row"><i></i><span></span><em></em></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#home" class="sidebar-link active" data-target="home" aria-current="page">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span>Início</span>
+    </section>
+
+    <!-- ═══════════════════ SISTEMAS ═══════════════════ -->
+    <section class="sec" id="systems">
+        <div class="wrap">
+            <header class="sec-head">
+                <h2 class="sec-title">Sistemas de Solicitação</h2>
+                <p class="sec-sub">Acesse rapidamente as ferramentas que fazem parte do seu dia a dia.</p>
+            </header>
+
+            <div class="cards" id="systemsGrid">
+
+                <a class="card reveal" href="https://sgart-seteg.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+                    <h3 class="card-title">ART</h3>
+                    <p class="card-desc">Anotação de Responsabilidade Técnica</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://bemteview-seteg.vercel.app" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    <h3 class="card-title">Bem-Te-View</h3>
+                    <p class="card-desc">Acompanhamento de horas do Clockify</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://sgc-seteg.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 21 18 21 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
+                    <h3 class="card-title">Cartografia</h3>
+                    <p class="card-desc">Mapas, plantas e georreferenciamento</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://seteg-card.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-orange" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
+                    <h3 class="card-title">Compras</h3>
+                    <p class="card-desc">Solicitações de compra e aquisição</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://contrato-terceirizado.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></span>
+                    <h3 class="card-title">Contrato de Terceirizados</h3>
+                    <p class="card-desc">Contrato de prestação de serviços terceirizados</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://folgas.setegce.com/login" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-emerald" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                    <h3 class="card-title">Folgas</h3>
+                    <p class="card-desc">Solicitação de folgas</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://inovacao-seteg.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-indigo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.6.6 1.15 1.05 1.41 2.5"/></svg></span>
+                    <h3 class="card-title">Inovação</h3>
+                    <p class="card-desc">Envio de ideias e projetos de inovação</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://sga-seteg.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-purple" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".6"/><circle cx="17.5" cy="10.5" r=".6"/><circle cx="8.5" cy="7.5" r=".6"/><circle cx="6.5" cy="12.5" r=".6"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688"/></svg></span>
+                    <h3 class="card-title">Peças Gráficas</h3>
+                    <p class="card-desc">Artes, banners e materiais visuais</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://sgrh-seteg.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                    <h3 class="card-title">Requisição RH</h3>
+                    <p class="card-desc">Solicitações internas de Recursos Humanos</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+                <a class="card reveal" href="https://ti.setegce.com/" target="_blank" rel="noopener noreferrer">
+                    <span class="card-ico c-cyan" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+                    <h3 class="card-title">TI</h3>
+                    <p class="card-desc">Suporte de Tecnologia da Informação</p>
+                    <span class="card-foot"><span class="card-go">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+                </a>
+
+            </div>
+            <p class="empty" id="systemsEmpty" hidden>Nenhum sistema nesta área.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ AVALIAÇÕES ═══════════════════ -->
+    <section class="sec sec-alt" id="avaliacoes">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="eyebrow">Indicadores</span>
+                <h2 class="sec-title">Avaliações</h2>
+                <p class="sec-sub">Acompanhe a percepção de quem é atendido pela SETEG.</p>
+            </header>
+
+            <a class="feature reveal" href="https://nps-dashboard-gold.vercel.app/" target="_blank" rel="noopener noreferrer">
+                <span class="card-ico c-cyan" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+                <div class="feature-body">
+                    <span class="tag">Dashboard</span>
+                    <h3 class="feature-title">Dashboard de Avaliação</h3>
+                    <p class="feature-desc">Confira os indicadores de satisfação e NPS da SETEG.</p>
+                </div>
+                <span class="btn btn-primary feature-btn">
+                    Ver dashboard
+                    <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
             </a>
-            <a href="#systems" class="sidebar-link" data-target="systems">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                <span>Solicitações</span>
-            </a>
-            <a href="#avaliacoes" class="sidebar-link" data-target="avaliacoes">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span>Avaliações</span>
-            </a>
-            <a href="#manuals" class="sidebar-link" data-target="manuals">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                <span>Manuais</span>
-            </a>
-            <a href="#support" class="sidebar-link" data-target="support">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                <span>Suporte</span>
-            </a>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ MANUAIS ═══════════════════ -->
+    <section class="sec" id="manuals">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="eyebrow">Documentação</span>
+                <h2 class="sec-title">Manuais e instruções</h2>
+                <p class="sec-sub">Encontre orientações para realizar suas atividades com mais rapidez e segurança.</p>
+            </header>
+
+            <div class="cards">
+                <article class="card card-static reveal">
+                    <span class="card-ico c-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                    <span class="tag">Manual</span>
+                    <h3 class="card-title">Manual da Cartografia</h3>
+                    <p class="card-desc">Passo a passo para elaboração de croquis e mapas.</p>
+                    <a class="btn btn-outline card-btn" href="https://manual-cartografia.vercel.app/" target="_blank" rel="noopener noreferrer">
+                        Abrir manual
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ SUPORTE ═══════════════════ -->
+    <section class="sec sec-alt" id="support">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="eyebrow">Atendimento</span>
+                <h2 class="sec-title">Como podemos ajudar?</h2>
+                <p class="sec-sub">Fale direto com o responsável pelo setor que você precisa.</p>
+            </header>
+
+            <div class="search">
+                <svg class="search-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="supportSearch" class="search-input" placeholder="Buscar setor, responsável ou e-mail..." aria-label="Buscar canal de suporte" autocomplete="off">
+            </div>
+
+            <div class="cards" id="supportGrid">
+
+                <article class="card card-static reveal" data-q="biotico biótico marcelo holderbaum marcelo@setegce.com fauna flora">
+                    <span class="card-ico c-green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
+                    <h3 class="card-title">Biótico</h3>
+                    <p class="sup-person">Marcelo Holderbaum</p>
+                    <p class="sup-mail">marcelo@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:marcelo@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="comercial mariangela mariângela ciodaro mariangela@setegce.com vendas proposta">
+                    <span class="card-ico c-orange" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                    <h3 class="card-title">Comercial</h3>
+                    <p class="sup-person">Mariângela Ciodaro</p>
+                    <p class="sup-mail">mariangela@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:mariangela@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="dp departamento pessoal talita de lima dp@setegce.com folha ponto">
+                    <span class="card-ico c-indigo" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                    <h3 class="card-title">DP</h3>
+                    <p class="sup-person">Talita de Lima</p>
+                    <p class="sup-mail">dp@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:dp@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="financeiro nadia vieira nadia@setegce.com pagamento nota fiscal reembolso">
+                    <span class="card-ico c-yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+                    <h3 class="card-title">Financeiro</h3>
+                    <p class="sup-person">Nadia Vieira</p>
+                    <p class="sup-mail">nadia@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:nadia@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="geoambiental lizabeth silva lizabeth@setegce.com meio ambiente licenciamento">
+                    <span class="card-ico c-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+                    <h3 class="card-title">Geoambiental</h3>
+                    <p class="sup-person">Lizabeth Silva</p>
+                    <p class="sup-mail">lizabeth@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:lizabeth@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="inovacao inovação ricardo silveira ricardo@setegce.com sistemas tecnologia ideia">
+                    <span class="card-ico c-cyan" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.6.6 1.15 1.05 1.41 2.5"/></svg></span>
+                    <h3 class="card-title">Inovação</h3>
+                    <p class="sup-person">Ricardo Silveira</p>
+                    <p class="sup-mail">ricardo@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:ricardo@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="pmo eveline mesquina eveline@setegce.com projeto cronograma">
+                    <span class="card-ico c-purple" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4"/><rect x="9" y="3" width="6" height="18" rx="1"/><path d="M15 8h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4"/></svg></span>
+                    <h3 class="card-title">PMO</h3>
+                    <p class="sup-person">Eveline Mesquina</p>
+                    <p class="sup-mail">eveline@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:eveline@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="recursos humanos rh laicia nascimento rh@setegce.com contratacao contratação beneficio">
+                    <span class="card-ico c-pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                    <h3 class="card-title">Recursos Humanos</h3>
+                    <p class="sup-person">Laicia Nascimento</p>
+                    <p class="sup-mail">rh@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:rh@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+                <article class="card card-static reveal" data-q="administrativo juliana vicente juliana@setegce.com compras infraestrutura">
+                    <span class="card-ico c-emerald" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M10 21v-6h4v6"/></svg></span>
+                    <h3 class="card-title">Administrativo</h3>
+                    <p class="sup-person">Juliana Vicente</p>
+                    <p class="sup-mail">juliana@setegce.com</p>
+                    <a class="btn btn-outline card-btn" href="mailto:juliana@setegce.com">Enviar e-mail <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                </article>
+
+            </div>
+            <p class="empty" id="supportEmpty" hidden>Nenhum setor encontrado. Tente outro termo.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="ftr">
+    <div class="wrap ftr-top">
+        <div class="ftr-brand">
+            <span class="brand">
+                <img src="images/favicon.png" alt="" class="brand-mark" aria-hidden="true" onerror="this.style.display='none'">
+                <span class="brand-text"><strong>SETEG</strong><span>Portal Interno</span></span>
+            </span>
+            <p class="ftr-tag">Portal interno de sistemas e solicitações.</p>
+        </div>
+        <nav class="ftr-links" aria-label="Links rápidos">
+            <span class="ftr-links-title">Links rápidos</span>
+            <a href="#home">Início</a>
+            <a href="#systems">Solicitações</a>
+            <a href="#avaliacoes">Avaliações</a>
+            <a href="#manuals">Manuais</a>
+            <a href="#support">Suporte</a>
         </nav>
-    </aside>
+    </div>
+    <div class="wrap ftr-legal">
+        <span>Versão: V1.0.0</span>
+        <span class="ftr-sep" aria-hidden="true">•</span>
+        <span>© Desenvolvido por Seteg Soluções Ambientais LTDA</span>
+        <span class="ftr-sep" aria-hidden="true">•</span>
+        <span>2026</span>
+    </div>
+</footer>
 
-    <!-- ===== CONTEÚDO PRINCIPAL ===== -->
-    <main class="main-content" id="main-content">
-
-        <!-- ===== HOME ===== -->
-        <section class="page-section active" id="home" aria-labelledby="home-title">
-            <div class="hero">
-                <div class="hero-bg-animation" aria-hidden="true">
-                    <div class="orb orb-1"></div>
-                    <div class="orb orb-2"></div>
-                    <div class="orb orb-3"></div>
-                </div>
-                <div class="hero-content">
-                    <h1 class="hero-title" id="home-title">
-                        Portal de <span class="brand-orange">Solicitações</span> e <span class="brand-blue">Manuais</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                        Acesso aos sistemas, manuais e materiais de apoio centralizados.<br>
-                        Otimizando seu dia a dia na <strong class="brand-blue">SETEG</strong>.
-                    </p>
-                    <div class="hero-dashboard">
-                        <div class="glass-card stat-widget">
-                            <div class="widget-icon icon-blue" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            </div>
-                            <div class="widget-info">
-                                <span class="widget-number">9</span>
-                                <span class="widget-label">Sistemas Integrados</span>
-                            </div>
-                        </div>
-                        <div class="glass-card stat-widget">
-                            <div class="widget-icon icon-purple" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                            </div>
-                            <div class="widget-info">
-                                <span class="widget-number">1</span>
-                                <span class="widget-label">Manual Disponível</span>
-                            </div>
-                        </div>
-                        <div class="glass-card stat-widget">
-                            <div class="widget-icon icon-orange" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            </div>
-                            <div class="widget-info">
-                                <span class="widget-number">9</span>
-                                <span class="widget-label">Suporte Técnico</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== SISTEMAS ===== -->
-        <section class="page-section" id="systems" aria-labelledby="systems-title">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title" id="systems-title">Sistemas de Solicitação</h2>
-                    <p class="section-subtitle">Clique no card para acessar o sistema.</p>
-                </div>
-                <div class="systems-grid" id="systemsGrid">
-                    <!-- ART -->
-                    <a href="https://sgart-seteg.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="art anotação responsabilidade técnica engenharia documento">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-green" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
-                        </div>
-                        <h3 class="system-card-title">ART</h3>
-                        <p class="system-card-desc">Anotação de Responsabilidade Técnica</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Cartografia -->
-                    <a href="https://sgc-seteg.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="cartografia mapa georreferenciamento planta sgc topografia">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-blue" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 21 18 21 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Cartografia</h3>
-                        <p class="system-card-desc">Mapas, plantas e georreferenciamento</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Compras -->
-                    <a href="https://seteg-card.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="compra card cartão corporativo solicitação aquisição">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-orange" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Compras</h3>
-                        <p class="system-card-desc">Solicitações de compra e aquisição</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Contrato de Terceirizados -->
-                    <a href="https://contrato-terceirizado.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="terceirizado contrato terceirizados prestador serviço">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-red" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Contrato de Terceirizados</h3>
-                        <p class="system-card-desc">Contrato de prestação de serviços terceirizados</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Folgas -->
-                    <a href="https://folgas.setegce.com/login" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="folgas férias solicitação escala descanso">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-emerald" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Folgas</h3>
-                        <p class="system-card-desc">Solicitação de folgas</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Inovação -->
-                    <a href="https://inovacao-seteg.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="inovação ideia projeto melhoria sugestão">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-indigo" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.6.6 1.15 1.05 1.41 2.5"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Inovação</h3>
-                        <p class="system-card-desc">Envio de ideias e projetos de inovação</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Peças Gráficas -->
-                    <a href="https://sga-seteg.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="peças gráficas arte design banner sga material visual">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-purple" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Peças Gráficas</h3>
-                        <p class="system-card-desc">Artes, banners e materiais visuais</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- Requisição RH -->
-                    <a href="https://sgrh-seteg.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="requisição rh recursos humanos pessoal interno departamento dp">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-pink" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Requisição RH</h3>
-                        <p class="system-card-desc">Solicitações internas de Recursos Humanos</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                    <!-- TI -->
-                    <a href="https://ti.setegce.com/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="ti tecnologia informação suporte técnico chamado helpdesk">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-cyan" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                        </div>
-                        <h3 class="system-card-title">TI</h3>
-                        <p class="system-card-desc">Suporte de Tecnologia da Informação</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== AVALIAÇÕES ===== -->
-        <section class="page-section" id="avaliacoes" aria-labelledby="avaliacoes-title">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title" id="avaliacoes-title">Avaliações</h2>
-                    <p class="section-subtitle">Clique no card para acessar o dashboard.</p>
-                </div>
-                <div class="systems-grid">
-                    <!-- NPS -->
-                    <a href="https://nps-dashboard-gold.vercel.app/" target="_blank" rel="noopener noreferrer" class="system-card fade-up" data-search="nps avaliação satisfação cliente nota pesquisa dashboard">
-                        <span class="status-dot available" title="Sistema disponível"></span>
-                        <div class="system-card-icon icon-cyan" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        </div>
-                        <h3 class="system-card-title">Avaliação de NPS</h3>
-                        <p class="system-card-desc">Dashboard de satisfação e Net Promoter Score.</p>
-                        <span class="system-card-link">Acessar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== MANUAIS ===== -->
-        <section class="page-section" id="manuals" aria-labelledby="manuals-title">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title" id="manuals-title">Manuais e Instruções</h2>
-                    <p class="section-subtitle">Documentação organizada para facilitar a elaboração de produtos</p>
-                </div>
-                <div class="manuals-grid" id="manualsGrid">
-                    <article class="manual-item fade-up" data-category="sistemas" data-search="sgc cartografia mapa tutorial guia sistema">
-                        <div class="manual-item-icon icon-blue" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 21 18 21 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-                        </div>
-                        <div class="manual-item-content">
-                            <h4 class="manual-item-title">Manual da Cartografia</h4>
-                            <p class="manual-item-desc">Passo a passo para elaboração de croquis e mapas</p>
-                            <a href="https://manual-cartografia.vercel.app/" target="_blank" rel="noopener noreferrer" class="manual-item-btn">
-                                Abrir manual 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                            </a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== SUPORTE ===== -->
-        <section class="page-section" id="support" aria-labelledby="support-title">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title" id="support-title">Canais de Suporte SETEG</h2>
-                    <p class="section-subtitle">Contate o responsável do seu setor.</p>
-                </div>
-                <div class="support-grid">
-                    <!-- Biótico -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-emerald" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4-3 8-7.5 8-12a8 8 0 1 0-16 0c0 4.5 4 9 8 12z"/><path d="M9 12l2 2 4-4"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Biótico</h4>
-                        <p class="support-responsible">Responsável: <strong>Marcelo Holderbaum</strong></p>
-                        <p class="support-email">marcelo@setegce.com</p>
-                    </div>
-                    <!-- Comercial -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-orange" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Comercial</h4>
-                        <p class="support-responsible">Responsável: <strong>Mariângela Ciodaro</strong></p>
-                        <p class="support-email">mariangela@setegce.com</p>
-                    </div>
-                    <!-- DP -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-indigo" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/></svg>
-                        </div>
-                        <h4 class="support-card-title">DP</h4>
-                        <p class="support-responsible">Responsável: <strong>Talita de Lima</strong></p>
-                        <p class="support-email">dp@setegce.com</p>
-                    </div>
-                    <!-- Financeiro -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-yellow" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Financeiro</h4>
-                        <p class="support-responsible">Responsável: <strong>Nadia Vieira</strong></p>
-                        <p class="support-email">nadia@setegce.com</p>
-                    </div>
-                    <!-- Geoambiental -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-blue" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 21 18 21 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Geoambiental</h4>
-                        <p class="support-responsible">Responsável: <strong>Lizabeth Silva</strong></p>
-                        <p class="support-email">lizabeth@setegce.com</p>
-                    </div>
-                    <!-- Inovação -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-cyan" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Inovação</h4>
-                        <p class="support-responsible">Responsável: <strong>Ricardo Silveira</strong></p>
-                        <p class="support-email">ricardo@setegce.com</p>
-                    </div>
-                    <!-- PMO -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-purple" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                        </div>
-                        <h4 class="support-card-title">PMO</h4>
-                        <p class="support-responsible">Responsável: <strong>Eveline Mesquina</strong></p>
-                        <p class="support-email">eveline@setegce.com</p>
-                    </div>
-                    <!-- Recursos Humanos -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-pink" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Recursos Humanos</h4>
-                        <p class="support-responsible">Responsável: <strong>Laicia Nascimento</strong></p>
-                        <p class="support-email">rh@setegce.com</p>
-                    </div>
-                    <!-- Administrativo -->
-                    <div class="support-card fade-up">
-                        <div class="support-card-icon icon-green" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        </div>
-                        <h4 class="support-card-title">Administrativo</h4>
-                        <p class="support-responsible">Responsável: <strong>Juliana Vicente</strong></p>
-                        <p class="support-email">juliana@setegce.com</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== RODAPÉ FIXO ===== -->
-        <footer class="footer">
-            <div class="footer-content">
-                <span>Versão: V1.0.0</span>
-                <span class="footer-separator">•</span>
-                <span>© Desenvolvido por Seteg Soluções Ambientais LTDA</span>
-                <span class="footer-separator">•</span>
-                <span>2026</span>
-            </div>
-        </footer>
-
-    </main>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

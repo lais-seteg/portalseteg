@@ -1,87 +1,199 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* ══════════════════════════════════════════════════════════════════════
+   PORTAL SETEG · comportamento da interface
+   Sem bibliotecas: cinco blocos independentes, cada um protegido contra a
+   ausência do seu elemento — se um trecho da página mudar, os outros
+   seguem funcionando.
+   ══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
 
-    // ===== NAVEGAÇÃO ENTRE SEÇÕES =====
-    const sections = document.querySelectorAll('.page-section');
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    var semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function showSection(targetId) {
-        sections.forEach(section => section.classList.remove('active'));
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            window.scrollTo(0, 0);
+    // Marca que o script assumiu: só então o CSS esconde os elementos que
+    // serão revelados na rolagem. Sem isto, uma falha aqui deixaria a página
+    // em branco.
+    document.documentElement.classList.add('js');
+
+    // Rede de segurança: se em 3s algum elemento ainda não tiver sido
+    // revelado (observer que não disparou, aba aberta em segundo plano…),
+    // mostra tudo. Melhor sem animação do que invisível.
+    window.setTimeout(function () {
+        var presos = document.querySelectorAll('.reveal:not(.is-in)');
+        for (var i = 0; i < presos.length; i++) presos[i].classList.add('is-in');
+    }, 3000);
+
+    /* ─── 1. Header: ganha traço e sombra assim que a página sai do topo ─── */
+    (function header() {
+        var hdr = document.getElementById('hdr');
+        if (!hdr) return;
+        var preso = false;
+        function aoRolar() {
+            var deve = window.scrollY > 8;
+            if (deve !== preso) { preso = deve; hdr.classList.toggle('is-stuck', deve); }
         }
-        sidebarLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('data-target') === targetId);
-        });
-    }
+        // passive: o listener não chama preventDefault, então o navegador não
+        // precisa esperar por ele para rolar.
+        window.addEventListener('scroll', aoRolar, { passive: true });
+        aoRolar();
+    })();
 
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection(link.getAttribute('data-target'));
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('open');
-                overlay?.classList.remove('visible');
+    /* ─── 2. Menu mobile ─── */
+    (function menu() {
+        var burger = document.getElementById('burger');
+        var nav    = document.getElementById('mobileNav');
+        var scrim  = document.getElementById('scrim');
+        var fechar = document.getElementById('mnavClose');
+        if (!burger || !nav || !scrim) return;
+
+        var aberto = false;
+
+        function abrir() {
+            aberto = true;
+            nav.hidden = false; scrim.hidden = false;
+            // Um quadro entre exibir e animar, senão a transição não roda.
+            requestAnimationFrame(function () {
+                nav.classList.add('is-open');
+                scrim.classList.add('is-open');
+            });
+            burger.classList.add('is-open');
+            burger.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+            var primeiro = nav.querySelector('.mnav-link');
+            if (primeiro) primeiro.focus({ preventScroll: true });
+        }
+
+        function fecha() {
+            if (!aberto) return;
+            aberto = false;
+            nav.classList.remove('is-open');
+            scrim.classList.remove('is-open');
+            burger.classList.remove('is-open');
+            burger.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+            window.setTimeout(function () {
+                if (!aberto) { nav.hidden = true; scrim.hidden = true; }
+            }, semMovimento ? 0 : 260);
+        }
+
+        burger.addEventListener('click', function () { aberto ? fecha() : abrir(); });
+        scrim.addEventListener('click', fecha);
+        if (fechar) fechar.addEventListener('click', function () { fecha(); burger.focus(); });
+        nav.addEventListener('click', function (e) { if (e.target.closest('a')) fecha(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && aberto) { fecha(); burger.focus(); } });
+        // Ao voltar para o desktop o painel não pode ficar preso aberto.
+        window.addEventListener('resize', function () { if (window.innerWidth > 900) fecha(); });
+    })();
+
+    /* ─── 3. Entrada dos elementos + contagem dos indicadores ───
+       Um observer só para as duas coisas: cada elemento é revelado uma vez
+       e depois deixa de ser observado. */
+    (function entrada() {
+        var alvos = document.querySelectorAll('.reveal, [data-count]');
+        if (!alvos.length) return;
+
+        function contar(el) {
+            var destino = parseInt(el.getAttribute('data-count'), 10);
+            if (isNaN(destino)) return;
+            var doisDigitos = function (n) { return n < 10 ? '0' + n : String(n); };
+            if (semMovimento) { el.textContent = doisDigitos(destino); return; }
+            var inicio = null, dur = 900;
+            function passo(ts) {
+                if (inicio === null) inicio = ts;
+                var p = Math.min((ts - inicio) / dur, 1);
+                // desaceleração no fim, para o número "assentar"
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = doisDigitos(Math.round(destino * eased));
+                if (p < 1) requestAnimationFrame(passo);
             }
+            requestAnimationFrame(passo);
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            alvos.forEach(function (el) {
+                el.classList.add('is-in');
+                var n = el.hasAttribute('data-count') ? el : el.querySelector('[data-count]');
+                if (n) contar(n);
+            });
+            return;
+        }
+
+        var obs = new IntersectionObserver(function (entradas) {
+            entradas.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                var el = e.target;
+                el.classList.add('is-in');
+                var n = el.hasAttribute('data-count') ? el : el.querySelector('[data-count]');
+                if (n && !n.dataset.done) { n.dataset.done = '1'; contar(n); }
+                obs.unobserve(el);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        alvos.forEach(function (el, i) {
+            // Escalona levemente os cards de uma mesma faixa.
+            if (!semMovimento) el.style.transitionDelay = (i % 4) * 60 + 'ms';
+            obs.observe(el);
         });
-    });
+    })();
 
-    // ===== MOBILE MENU ======
-    const sidebar = document.getElementById('sidebar');
-    let overlay = null;
-    
-    if (window.innerWidth <= 768) {
-        const main = document.querySelector('.main-content');
-        const header = document.createElement('div');
-        header.className = 'mobile-header';
-        header.innerHTML = `
-            <button class="mobile-menu-btn" aria-label="Menu">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-            </button>
-            <span class="mobile-title">Portal SETEG</span>
-        `;
-        main.prepend(header);
+    /* ─── 4. Scroll-spy: marca no menu a seção que está sendo lida ─── */
+    (function spy() {
+        var links = document.querySelectorAll('[data-spy]');
+        if (!links.length || !('IntersectionObserver' in window)) return;
 
-        overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-
-        const toggleMenu = () => { 
-            sidebar.classList.toggle('open'); 
-            overlay.classList.toggle('visible'); 
-        };
-        
-        header.querySelector('.mobile-menu-btn').addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-    }
-
-    // ===== FADE-UP ANIMATIONS =====
-    const fadeObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                fadeObserver.unobserve(entry.target);
-            }
+        var secoes = [];
+        links.forEach(function (l) {
+            var s = document.getElementById(l.getAttribute('data-spy'));
+            if (s && secoes.indexOf(s) === -1) secoes.push(s);
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        if (!secoes.length) return;
 
-    document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+        var atual = '';
+        function marcar(id) {
+            if (id === atual) return;
+            atual = id;
+            links.forEach(function (l) { l.classList.toggle('is-active', l.getAttribute('data-spy') === id); });
+        }
 
-    // ===== MANUAL BUTTONS (DEMO) =====
-   document.querySelectorAll('.manual-item-btn').forEach(btn => {
-    // Se já for um link (<a>), não adiciona event listener
-    if (btn.tagName === 'A') return;
-    
-    btn.addEventListener('click', function() {
-        const title = this.closest('.manual-item')?.querySelector('.manual-item-title')?.textContent;
-        alert(`Abrindo: ${title}\n\nEm produção, isso abrirá o PDF do manual.`);
-    });
-});
+        var obs = new IntersectionObserver(function (entradas) {
+            // Entre as seções visíveis, vale a que estiver mais acima.
+            var visiveis = entradas.filter(function (e) { return e.isIntersecting; });
+            if (!visiveis.length) return;
+            visiveis.sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+            marcar(visiveis[0].target.id);
+        }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
 
-    console.log('✅ Portal SETEG v1.0.0 carregado com sucesso!');
-});
+        secoes.forEach(function (s) { obs.observe(s); });
+    })();
+
+    /* ─── 6. Busca de setores no suporte ─── */
+    (function busca() {
+        var campo = document.getElementById('supportSearch');
+        var grade = document.getElementById('supportGrid');
+        var vazio = document.getElementById('supportEmpty');
+        if (!campo || !grade) return;
+
+        var cards = grade.querySelectorAll('.card');
+
+        // Sem acento e em minúsculas, para "biotico" achar "Biótico".
+        function normalizar(s) {
+            return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        }
+
+        var timer;
+        campo.addEventListener('input', function () {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function () {
+                var termo = normalizar(campo.value.trim());
+                var visiveis = 0;
+                cards.forEach(function (card) {
+                    var chave = normalizar(card.getAttribute('data-q') + ' ' + card.textContent);
+                    var mostra = !termo || chave.indexOf(termo) !== -1;
+                    card.hidden = !mostra;
+                    if (mostra) visiveis++;
+                });
+                if (vazio) vazio.hidden = visiveis > 0;
+            }, 120);
+        });
+    })();
+
+})();
