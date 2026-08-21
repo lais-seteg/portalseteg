@@ -89,6 +89,12 @@
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* O atributo hidden tem de vencer o display do componente: um painel com
+   display:flex/grid continua na tela mesmo com hidden — e, sendo transparente,
+   engole os cliques da página inteira. Vale para o menu mobile e para o
+   visualizador de informativos, que só existem quando são abertos. */
+[hidden] { display: none !important; }
+
 html {
     scroll-behavior: smooth;
     /* O header é fixo: âncoras param abaixo dele, e não atrás. */
@@ -159,7 +165,7 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 
 /* A seta anda alguns pixels quando o elemento pai recebe o cursor. */
 .i-arrow { transition: transform var(--t); }
-.btn:hover .i-arrow, .card:hover .i-arrow, .feature:hover .i-arrow { transform: translateX(4px); }
+.btn:hover .i-arrow, .card:hover .i-arrow { transform: translateX(4px); }
 
 /* ═══════════════ HEADER ═══════════════ */
 .hdr {
@@ -274,44 +280,167 @@ svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width:
 .hero-sub { font-size: clamp(1rem, 1.4vw, 1.125rem); color: var(--text-muted); max-width: 52ch; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(24px, 3.4vw, 36px); }
 
-/* ─── Composição visual (mockup em CSS) ─── */
+/* ─── Ecossistema SETEG ───
+   Uma visualização só: território, rede e indicadores no mesmo plano.
+
+   A superfície é quase toda o próprio fundo da página. A 38% de branco sobre
+   o creme (#f5f2ec) o resultado fica em ~#f9f7f3 — quatro níveis acima do
+   fundo. Não é um card branco com conteúdo dentro; é o fundo da página com um
+   limite de vidro em volta. Borda e sombra acompanham: traço a 45% e uma
+   sombra larga e fraquíssima, que dá apoio sem desenhar recorte.
+
+   O blur trabalha pouco aqui (atrás há creme liso e o halo do hero, ambos sem
+   textura); quem faz o efeito é o saturate, que puxa o azul de trás. Fica pela
+   paridade com o header, que usa a mesma receita. */
 .hero-visual { position: relative; }
-.mock {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r-lg); box-shadow: var(--sh-lg); overflow: hidden;
-    animation: float 9s ease-in-out infinite;
+.eco {
+    padding: clamp(22px, 2.4vw, 32px);
+    background: rgba(255, 255, 255, .26);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    backdrop-filter: saturate(140%) blur(8px);
+    border: 1px solid rgba(214, 203, 178, .4);
+    border-radius: var(--r-lg);
+    box-shadow: 0 8px 28px rgba(7, 29, 73, .04);
 }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-.mock-bar { display: flex; align-items: center; gap: 6px; padding: 13px 16px;
-            background: var(--surface-2); border-bottom: 1px solid var(--border); }
-.mock-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--border-strong); }
-.mock-bar i:first-child { background: var(--accent); }
-.mock-bar span { flex: 1; height: 8px; margin-left: 10px; border-radius: 4px; background: var(--border); }
+/* Título do componente, em uma linha só.
+   O tamanho não é escolha estética, é o que a conta permite: a frase tem 67
+   caracteres e o interior do card mede ~431px no desktop. Medida no navegador,
+   ela ocupa 368px a 11px e 435px a 13px — ou seja, 13px já não cabe. O clamp
+   fica entre .7rem e .8rem porque a coluna do hero encolhe para ~392px de
+   interior por volta de 1100px de janela, e a 11px a linha ainda passa ali.
 
-.mock-body { padding: 18px; display: grid; gap: 16px; }
-.mock-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.mock-tile { padding: 14px 12px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); }
-.mock-tile b { display: block; font-size: clamp(1.3rem, 2.1vw, 1.75rem); font-weight: 800; color: var(--primary);
-               letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.mock-tile span { display: block; margin-top: 6px; font-size: .68rem; font-weight: 500;
-                  line-height: 1.3; color: var(--text-muted); }
+   Abaixo do desktop a frase quebra em duas linhas em vez de estourar a
+   largura: nowrap ali empurraria o texto para fora do card. */
+.eco-title {
+    font-size: clamp(.7rem, .84vw, .8rem); font-weight: 600;
+    line-height: 1.5; letter-spacing: -.015em; color: var(--primary);
+    text-align: center;
+}
 
-.mock-chart { display: flex; align-items: flex-end; gap: 8px; height: clamp(84px, 5.5vw, 108px);
-              padding: 12px; border: 1px solid var(--border); border-radius: var(--r-md); }
-.mock-chart span { flex: 1; height: var(--h); border-radius: 3px 3px 0 0;
-                   background: linear-gradient(180deg, var(--primary-light), var(--primary)); opacity: .82; }
-.mock-chart span:nth-child(7) { background: linear-gradient(180deg, #ffa445, var(--accent)); opacity: 1; }
+/* ─── O palco ───
+   aspect-ratio reserva a caixa desde o primeiro frame: a altura não depende de
+   nada carregar, então não há salto de layout. O mapa fica centrado na altura
+   cheia e o viewBox manda na proporção (height:100% + width:auto), de modo que
+   ele nunca distorce e ocupa sempre a mesma fatia central do palco. */
+.eco-stage {
+    position: relative; aspect-ratio: 1 / .78;
+    margin-top: clamp(16px, 1.8vw, 22px);
+}
+.eco-map {
+    position: absolute; top: 0; right: 0;
+    height: 100%; width: auto;
+}
 
-.mock-rows { display: grid; gap: 8px; }
-.mock-row { display: flex; align-items: center; gap: 10px; padding: 9px 11px;
-            border: 1px solid var(--border); border-radius: var(--r-sm); }
-.mock-row i { width: 22px; height: 22px; border-radius: 6px; background: var(--i-blue-bg); flex: 0 0 auto; }
-.mock-row:nth-child(2) i { background: var(--i-orange-bg); }
-.mock-row:nth-child(3) i { background: var(--i-green-bg); }
-.mock-row span { flex: 1; height: 6px; border-radius: 3px; background: var(--border); }
-.mock-row em { width: 34px; height: 6px; border-radius: 3px; background: var(--border-strong); }
+/* ─── O território ───
+   Opacidades baixas de propósito: o mapa é o chão da composição. O traço é
+   fino de verdade — o viewBox tem 390 unidades exibidas em ~470px, então cada
+   unidade vira ~1,2px na tela, e 1 unidade de traço já desenha um contorno de
+   marcador.
 
+   O reset global dá stroke:currentColor e stroke-width:2 a todo svg: sem zerar
+   o traço, um nó de raio 2 vira quase só contorno — um anel escuro em volta do
+   próprio preenchimento. Por isso os círculos declaram stroke:none. */
+.eco-land      { fill: rgba(7, 29, 73, .012); stroke: rgba(7, 29, 73, .32); stroke-width: .6; }
+.eco-grid line { stroke: rgba(7, 29, 73, .1); stroke-width: .6; }
+.eco-node, .eco-hub, .eco-pulse { stroke: none; }
+.eco-node      { fill: rgba(7, 29, 73, .42); }
+
+/* Os raios: azul-marinho quase transparente, dois no acento. */
+.eco-ray         { stroke: rgba(7, 29, 73, .17); stroke-width: .55; }
+.eco-ray.is-warm { stroke: rgba(255, 130, 0, .34); }
+
+/* A origem no Ceará: maior que as pontas e no acento — é o único ponto do
+   componente com cor cheia. */
+.eco-hub   { fill: var(--accent); }
+.eco-pulse { fill: var(--accent); transform-box: fill-box; transform-origin: center; }
+
+/* ─── Entrada, uma vez ───
+   Só opacidade e dashoffset: nada aqui mexe em medida de layout, então o
+   componente nasce na posição final. A ordem é território → Ceará → raios →
+   pontas, lenta e escalonada. Os indicadores não esperam a rede: a contagem
+   dura 900ms e precisa estar visível para ser vista. */
+.eco-land, .eco-grid { animation: ecoSurge 1.4s var(--ease) both; }
+.eco-grid            { animation-delay: .35s; }
+.eco-origin          { animation: ecoSurge .9s var(--ease) .9s both; }
+
+/* Cada raio se desenha do Ceará para fora. --len é o comprimento exato do
+   traço, calculado na geração: sem ele o dash não fecharia na ponta. */
+.eco-ray {
+    stroke-dasharray: var(--len); stroke-dashoffset: var(--len);
+    animation: ecoDesenha 1.5s var(--ease) both;
+}
+.eco-ray:nth-child(1) { animation-delay: 1.35s; }
+.eco-ray:nth-child(2) { animation-delay: 1.47s; }
+.eco-ray:nth-child(3) { animation-delay: 1.59s; }
+.eco-ray:nth-child(4) { animation-delay: 1.71s; }
+.eco-ray:nth-child(5) { animation-delay: 1.83s; }
+.eco-ray:nth-child(6) { animation-delay: 1.95s; }
+.eco-ray:nth-child(7) { animation-delay: 2.07s; }
+.eco-ray:nth-child(8) { animation-delay: 2.19s; }
+
+/* As pontas acendem depois do raio que leva a cada uma. */
+.eco-node {
+    animation: ecoSurge .8s var(--ease) both;
+    animation-delay: calc(2.1s + var(--i) * .12s);
+}
+
+@keyframes ecoSurge   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ecoDesenha { to { stroke-dashoffset: 0; } }
+
+/* ─── Movimento contínuo ───
+   Dois sinais lentos e nada mais, e só depois da entrada terminar. */
+.eco-pulse { animation: ecoPulso 9s var(--ease) 3.2s infinite; }
+@keyframes ecoPulso {
+    0%        { transform: scale(1);   opacity: .38; }
+    26%, 100% { transform: scale(4.4); opacity: 0; }
+}
+
+/* Um traço curto percorrendo o raio, numa linha própria sobre a que já está
+   desenhada — o raio continua visível quando o sinal está fora dele. O vão é
+   maior que qualquer raio do mapa, então há sempre um só sinal em trânsito. */
+.eco-signal {
+    stroke: rgba(7, 29, 73, .42); stroke-width: .7;
+    stroke-dasharray: 4 300; animation: ecoSinal 12s linear 3s infinite;
+}
+.eco-signal.is-slow { animation-duration: 16s; animation-delay: 6s; }
+@keyframes ecoSinal { from { stroke-dashoffset: 304; } to { stroke-dashoffset: 0; } }
+
+/* ─── Os indicadores ───
+   Uma coluna só, à esquerda, distribuída na altura do palco. O mapa fica
+   ancorado à direita e passa por trás dos números: a faixa de 0 a 42% do palco
+   cobre apenas o oeste do território, onde não há nó nenhum — a ponta mais
+   ocidental da rede (Porto Velho) fica a 26% da largura do mapa, já fora do
+   alcance dos rótulos. É o que permite sobrepor sem colidir. */
+.eco-stats {
+    position: absolute; inset: 0; z-index: 1; width: 42%;
+    display: flex; flex-direction: column; justify-content: space-between;
+    animation: ecoSurge 1s var(--ease) .2s both;
+}
+/* 11ch quebra os rótulos de duas palavras em duas linhas ("CANAIS DE /
+   SUPORTE"). Não é só estética: em uma linha só, os dois rótulos de baixo
+   somam ~285px e encostam um no outro num palco de 311px — a largura do
+   componente no celular. Quebrados, cada canto fica no seu lugar em qualquer
+   largura, sem precisar trocar o layout. */
+.eco-stat {
+    display: flex; flex-direction: column-reverse; max-width: 11ch;
+    padding-left: 12px; border-left: 1px solid var(--border-strong);
+}
+
+/* O número é o único elemento de peso alto na composição. tabular-nums trava a
+   largura dos dígitos: a contagem sobe sem o texto tremer, o que também evita
+   reflow durante a animação. */
+.eco-stat dd b {
+    display: block; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800;
+    line-height: 1; letter-spacing: -.04em; color: var(--primary);
+}
+.eco-stat.is-lead dd b { font-size: clamp(2rem, 3.4vw, 2.75rem); }
+.eco-stat dt {
+    margin-top: 6px; font-size: clamp(.6rem, 1vw, .67rem); font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    line-height: 1.35; color: var(--text-muted);
+}
 
 /* ═══════════════ SEÇÕES ═══════════════ */
 .sec { padding: var(--sec-y) 0; }
@@ -369,6 +498,40 @@ a.card:hover .card-go { color: var(--accent-dark); }
 .sup-mail { margin-top: 2px; font-size: .84rem; color: var(--text-faint); word-break: break-word; }
 .card-static .tag { margin-bottom: 12px; align-self: flex-start; }
 
+/* ─── Card de sistema: dois destinos na mesma superfície ───
+   O card deixou de ser um <a> para caber, ao lado de "Acessar", o botão do
+   informativo — um <button> dentro de um <a> é HTML inválido, e aninhar dois
+   links deixaria o card sem um alvo previsível.
+
+   Para o card inteiro continuar clicável, o link "Acessar" se estica sobre
+   toda a superfície com um ::after; o botão do informativo sobe uma camada e
+   recebe o clique apenas na sua própria área. */
+.card-sys:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); border-color: var(--border-strong); }
+.card-sys:hover .card-ico { transform: scale(1.06) rotate(-3deg); }
+.card-sys:focus-within { border-color: var(--border-strong); box-shadow: var(--sh-md); }
+
+/* O rodape alinha a direita — é o que mantém "Acessar" na ponta também no
+   card de TI, que não tem informativo. */
+.card-sys .card-foot { justify-content: flex-end; }
+
+.card-sys .card-go::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-lg); }
+.card-sys .card-go:hover { color: var(--accent-dark); }
+.card-sys .card-go:hover .i-arrow { transform: translateX(4px); }
+
+/* Discreto e na outra ponta do rodapé: é o caminho secundário do card.
+   O margin-right:auto empurra só o informativo para a esquerda — "Acessar"
+   continua onde está, na direita. */
+.card-inf {
+    position: relative; z-index: 1; margin-right: auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px 6px 10px; border-radius: var(--r-pill);
+    background: var(--surface-2); border: 1px solid var(--border);
+    font-size: .8rem; font-weight: 600; color: var(--text-muted);
+    transition: background var(--t), color var(--t), border-color var(--t);
+}
+.card-inf svg { width: 15px; height: 15px; flex: 0 0 auto; }
+.card-inf:hover { background: var(--surface); border-color: var(--primary); color: var(--primary); }
+
 .empty { margin-top: 26px; text-align: center; color: var(--text-faint); font-size: .95rem; }
 
 /* Tons dos ícones */
@@ -383,21 +546,135 @@ a.card:hover .card-go { color: var(--accent-dark); }
 .c-emerald { background: var(--i-emerald-bg); color: var(--i-emerald); }
 .c-yellow  { background: var(--i-yellow-bg);  color: var(--i-yellow); }
 
-/* ═══════════════ CARD DE DESTAQUE (Avaliações) ═══════════════ */
-.feature {
-    display: flex; align-items: center; gap: clamp(18px, 2.2vw, 24px);
-    padding: clamp(22px, 2.6vw, 32px);
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
-    box-shadow: var(--sh-sm);
-    transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+/* ═══════════════ AVISO DE SEÇÃO ═══════════════ */
+/* Usado em Sistemas Integrados. Mesma superfície e mesmo traço dos cards, sem
+   sombra e sem hover — não é um destino clicável, é um recado que precisa ser
+   lido antes dos cards. O ícone não encolhe nem sobe junto com o texto quando
+   ele quebra em duas linhas. */
+.notice {
+    display: flex; align-items: flex-start; gap: 11px;
+    margin-bottom: var(--gap); padding: 13px 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    font-size: .875rem; line-height: 1.55; color: var(--text-muted);
 }
-.feature:hover, .feature:focus-visible { transform: translateY(-3px); box-shadow: var(--sh-lg); border-color: var(--border-strong); }
-.feature .card-ico { width: 56px; height: 56px; margin: 0; }
-.feature .card-ico svg { width: 26px; height: 26px; }
-.feature-body { flex: 1; min-width: 0; }
-.feature-title { margin-top: 10px; font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
-.feature-desc { margin-top: 6px; font-size: .975rem; color: var(--text-muted); }
-.feature-btn { flex: 0 0 auto; }
+.notice strong { font-weight: 600; color: var(--text); }
+.notice-ico {
+    flex: 0 0 auto; width: 17px; height: 17px; margin-top: 3px;
+    color: var(--accent-dark);
+}
+
+/* ═══════════════ VISUALIZADOR DE INFORMATIVOS ═══════════════ */
+/* Fica acima de tudo: o menu mobile ocupa z-index 110/120, este vai a 190/200.
+
+   Somente leitura, por construção: cada página é uma imagem, não existe o
+   arquivo do documento no servidor para o leitor baixar. O CSS fecha os
+   caminhos que sobram no navegador — seleção, arrastar a imagem para fora,
+   e o alvo do clique com o botão direito. */
+.vw-scrim {
+    position: fixed; inset: 0; z-index: 190;
+    background: rgba(4,18,46,.72);
+    -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+    opacity: 0; transition: opacity var(--t);
+}
+.vw-scrim.is-open { opacity: 1; }
+
+.vw {
+    /* --vw-z é o nível de zoom, trocado pelo script; --vw-base é a largura da
+       página a 100%: cabe na janela sem precisar de rolagem horizontal. */
+    --vw-z: 1;
+    --vw-base: min(760px, 92vw);
+
+    position: fixed; inset: clamp(0px, 2vw, 28px); z-index: 200;
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--sh-lg);
+    opacity: 0; transform: translateY(12px) scale(.99);
+    transition: opacity var(--t), transform var(--t);
+}
+.vw.is-open { opacity: 1; transform: none; }
+
+/* ─── Barra superior ─── */
+.vw-bar {
+    display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
+    flex: 0 0 auto; padding: 12px clamp(12px, 2vw, 20px);
+    background: var(--primary); color: var(--text-on-primary);
+}
+.vw-id { flex: 1; min-width: 0; }
+.vw-eyebrow { display: block; font-size: .66rem; font-weight: 700; letter-spacing: .12em;
+              text-transform: uppercase; color: rgba(255,255,255,.6); }
+.vw-title { font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 700; letter-spacing: -.02em;
+            line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.vw-tools { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.vw-count { font-size: .82rem; font-variant-numeric: tabular-nums;
+            color: rgba(255,255,255,.72); white-space: nowrap; }
+
+.vw-zoom { display: flex; align-items: center; gap: 2px; padding: 3px;
+           background: rgba(255,255,255,.1); border-radius: var(--r-pill); }
+.vw-level { min-width: 3.6em; text-align: center; font-size: .78rem; font-weight: 600;
+            font-variant-numeric: tabular-nums; }
+
+.vw-btn {
+    display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto;
+    border-radius: var(--r-pill); color: inherit;
+    transition: background var(--t), opacity var(--t);
+}
+.vw-btn svg { width: 17px; height: 17px; }
+.vw-btn:hover { background: rgba(255,255,255,.16); }
+.vw-btn[disabled] { opacity: .34; cursor: default; }
+.vw-btn[disabled]:hover { background: none; }
+.vw-close { background: rgba(255,255,255,.1); }
+
+/* ─── Área de leitura ───
+   overscroll-behavior evita que a rolagem "vaze" para a página atrás quando
+   o documento chega ao fim. */
+.vw-body {
+    flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: clamp(12px, 2vw, 24px);
+    background: var(--surface-2);
+}
+/* fit-content com min-width:100% deixa o documento crescer além da área
+   visível quando o zoom passa de 100% — aí a rolagem horizontal aparece sem
+   que as páginas centralizadas sejam cortadas na esquerda. */
+.vw-doc {
+    display: flex; flex-direction: column; gap: clamp(12px, 1.6vw, 20px);
+    width: fit-content; min-width: 100%;
+}
+
+.vw-page {
+    position: relative; flex: 0 0 auto; margin-inline: auto;
+    width: calc(var(--vw-base) * var(--vw-z));
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r-sm); box-shadow: var(--sh-md); overflow: hidden;
+}
+.vw-page img {
+    display: block; width: 100%; height: auto;
+    /* Reserva a proporção da página antes da imagem chegar: nada salta. */
+    aspect-ratio: 1224 / 1584;
+    -webkit-user-select: none; user-select: none;
+    -webkit-user-drag: none; -webkit-touch-callout: none;
+    /* A imagem não é alvo de ponteiro: um clique com o botão direito ou um
+       toque longo atinge a folha, e o navegador não oferece "salvar imagem". */
+    pointer-events: none;
+}
+
+.vw-foot {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    flex: 0 0 auto; padding: 10px 16px; text-align: center;
+    border-top: 1px solid var(--border); background: var(--surface);
+    font-size: .78rem; color: var(--text-faint);
+}
+.vw-foot svg { width: 14px; height: 14px; flex: 0 0 auto; }
+
+/* Em celular o visualizador ocupa a tela inteira e a barra fica só com o
+   essencial: título, zoom e fechar. */
+@media (max-width: 640px) {
+    .vw { inset: 0; border-radius: 0; --vw-base: min(760px, 100%); }
+    .vw-bar { padding: 10px 12px; gap: 10px; }
+    .vw-eyebrow, .vw-count { display: none; }
+    .vw-body { padding: 10px; }
+}
 
 /* ═══════════════ FOOTER ═══════════════ */
 .ftr { background: var(--primary); color: rgba(255,255,255,.7);
@@ -446,8 +723,6 @@ a.card:hover .card-go { color: var(--accent-dark); }
 @media (max-width: 900px) {
     .hdr-nav { display: none; }
     .burger { display: flex; }
-    .feature { flex-direction: column; align-items: flex-start; }
-    .feature-btn { width: 100%; }
 }
 
 /* ─── Celular em pé ─── */
@@ -456,7 +731,6 @@ a.card:hover .card-go { color: var(--accent-dark); }
     .hero-actions { gap: 10px; }
     .hero-actions .btn { flex: 1 1 100%; }   /* botões empilhados, largura cheia */
     .cards { grid-template-columns: 1fr; }
-    .mock-tiles { grid-template-columns: 1fr; }   /* três números empilhados */
     .ftr-top { flex-direction: column; gap: 28px; }
     /* Alvos de toque confortáveis. */
     .mnav-link { padding: 16px 14px; }
@@ -467,12 +741,15 @@ a.card:hover .card-go { color: var(--accent-dark); }
     .brand-text span { display: none; }      /* mantém só a marca */
     .badge { font-size: .68rem; padding: 5px 12px 5px 9px; }
     .btn { padding: 12px 16px; }
-    .feature .card-ico { width: 48px; height: 48px; }
 }
 
 /* ─── Abaixo disso cada pixel de largura conta ─── */
 @media (max-width: 340px) {
     .card-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+    /* No card de sistema o rodapé alinha à direita: empilha por ali, e o
+       informativo abre mão do margin automático para não ficar solto. */
+    .card-sys .card-foot { align-items: flex-end; }
+    .card-sys .card-inf { margin-right: 0; }
     .ftr-legal { flex-direction: column; gap: 4px; }
     .ftr-sep { display: none; }
 }
@@ -483,13 +760,13 @@ a.card:hover .card-go { color: var(--accent-dark); }
 @media (max-height: 560px) and (orientation: landscape) {
     .hero { padding-top: calc(var(--hdr-h) + 24px); padding-bottom: 40px; }
     .sec { padding: 44px 0; }
-    .mock { animation: none; }
     .mnav-link { padding: 11px 14px; }
     .mnav-head { margin-bottom: 6px; }
 }
 
-/* Nessas telas o hero já está em uma coluna: o mockup (decorativo) só
-   empurraria o conteúdo real para fora da tela. */
+/* Nessas telas o hero já está em uma coluna: o painel do ciclo repete, em
+   forma, o que o texto ao lado já diz — some para o conteúdo principal
+   caber na tela. */
 @media (max-height: 560px) and (orientation: landscape) and (max-width: 1080px) {
     .hero-visual { display: none; }
 }
@@ -507,6 +784,8 @@ a.card:hover .card-go { color: var(--accent-dark); }
 /* ═══════════════ IMPRESSÃO ═══════════════ */
 @media print {
     .hdr, .mnav, .scrim, .hero-visual { display: none !important; }
+    /* Imprimir é uma forma de salvar: o informativo fica fora do papel. */
+    .vw, .vw-scrim { display: none !important; }
     body { background: #fff; }
-    .card, .feature { box-shadow: none; break-inside: avoid; }
+    .card { box-shadow: none; break-inside: avoid; }
 }

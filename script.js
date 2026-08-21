@@ -165,4 +165,182 @@
         secoes.forEach(function (s) { obs.observe(s); });
     })();
 
+    /* ─── 5. Visualizador de informativos ───
+       Abre o informativo de um sistema para leitura dentro do portal. Cada
+       página é uma imagem em images/informativos/<sistema>-<n>.webp: não há
+       arquivo do documento no servidor, então não há o que baixar.
+
+       O que o leitor pode fazer é ler, ampliar e fechar. Os caminhos que
+       levariam o documento para fora (salvar, imprimir, arrastar a imagem,
+       menu de contexto) ficam bloqueados enquanto o visualizador está aberto.
+       Não é uma barreira criptográfica — quem quiser fotografar a tela
+       consegue; o objetivo é que a opção de download simplesmente não exista. */
+    (function informativos() {
+        var vw       = document.getElementById('vw');
+        var scrim    = document.getElementById('vwScrim');
+        var doc      = document.getElementById('vwDoc');
+        var area     = document.getElementById('vwBody');
+        var titulo   = document.getElementById('vwTitle');
+        var contador = document.getElementById('vwCount');
+        var nivel    = document.getElementById('vwLevel');
+        var btFechar = document.getElementById('vwClose');
+        var btMais   = document.getElementById('vwIn');
+        var btMenos  = document.getElementById('vwOut');
+        var gatilhos = document.querySelectorAll('[data-inf]');
+        if (!vw || !scrim || !doc || !area || !gatilhos.length) return;
+
+        var ZOOMS  = [0.75, 1, 1.25, 1.5, 2, 2.5, 3];
+        var PADRAO = 1;                 // índice de 100%
+        var iZoom  = PADRAO;
+        var aberto = false;
+        var origem = null;              // quem abriu, para devolver o foco
+        var atual  = '';                // informativo já montado
+
+        /* ─ Zoom ─ */
+        function aplicarZoom() {
+            vw.style.setProperty('--vw-z', ZOOMS[iZoom]);
+            if (nivel)   nivel.textContent = Math.round(ZOOMS[iZoom] * 100) + '%';
+            if (btMenos) btMenos.disabled = iZoom === 0;
+            if (btMais)  btMais.disabled  = iZoom === ZOOMS.length - 1;
+        }
+        function mudarZoom(passo) {
+            var novo = Math.min(ZOOMS.length - 1, Math.max(0, iZoom + passo));
+            if (novo === iZoom) return;
+            iZoom = novo;
+            aplicarZoom();
+        }
+
+        /* ─ Monta as páginas do documento ─ */
+        function montar(slug, nome, paginas) {
+            doc.textContent = '';
+            for (var p = 1; p <= paginas; p++) {
+                var folha = document.createElement('div');
+                folha.className = 'vw-page';
+
+                var img = document.createElement('img');
+                img.src = 'images/informativos/' + slug + '-' + p + '.webp';
+                img.alt = 'Informativo ' + nome + ' — página ' + p + ' de ' + paginas;
+                // As medidas reais evitam que o layout salte antes do carregamento.
+                img.width = 1224; img.height = 1584;
+                // A primeira página é o que aparece ao abrir; as outras só
+                // baixam quando chegam perto da tela.
+                img.loading  = p === 1 ? 'eager' : 'lazy';
+                img.decoding = 'async';
+                img.draggable = false;
+
+                folha.appendChild(img);
+                doc.appendChild(folha);
+            }
+        }
+
+        /* ─ "3 / 4": a página que está sendo lida ─ */
+        function aoRolar() {
+            if (!contador) return;
+            var folhas = doc.children;
+            if (!folhas.length) return;
+            // offsetTop é relativo ao .vw (que é posicionado); descontar o topo
+            // do documento devolve a distância dentro da área que rola.
+            var base = doc.offsetTop;
+            var meio = area.scrollTop + area.clientHeight * 0.4;
+            var n = 1;
+            for (var i = 0; i < folhas.length; i++) {
+                if (folhas[i].offsetTop - base <= meio) n = i + 1;
+            }
+            contador.textContent = n + ' / ' + folhas.length;
+        }
+
+        /* ─ Abrir e fechar ─ */
+        function abrir(gatilho) {
+            var slug = gatilho.getAttribute('data-inf');
+            if (!slug) return;
+            var nome    = gatilho.getAttribute('data-inf-title') || 'Informativo';
+            var paginas = parseInt(gatilho.getAttribute('data-inf-pages'), 10) || 1;
+
+            origem = gatilho;
+            if (titulo) titulo.textContent = nome;
+
+            // Remonta só quando o documento muda: reabrir o mesmo informativo
+            // aproveita as imagens já em cache.
+            if (slug !== atual) {
+                atual = slug;
+                iZoom = PADRAO;
+                montar(slug, nome, paginas);
+                area.scrollTop = 0;
+            }
+            aplicarZoom();
+
+            aberto = true;
+            vw.hidden = false; scrim.hidden = false;
+            // Um quadro entre exibir e animar, senão a transição não roda.
+            requestAnimationFrame(function () {
+                vw.classList.add('is-open');
+                scrim.classList.add('is-open');
+            });
+            document.body.style.overflow = 'hidden';
+            if (btFechar) btFechar.focus({ preventScroll: true });
+            aoRolar();
+        }
+
+        function fechar() {
+            if (!aberto) return;
+            aberto = false;
+            vw.classList.remove('is-open');
+            scrim.classList.remove('is-open');
+            document.body.style.overflow = '';
+            window.setTimeout(function () {
+                if (!aberto) { vw.hidden = true; scrim.hidden = true; }
+            }, semMovimento ? 0 : 260);
+            if (origem) { origem.focus({ preventScroll: true }); origem = null; }
+        }
+
+        /* ─ Ligações ─ */
+        gatilhos.forEach(function (g) {
+            g.addEventListener('click', function (e) {
+                // No card de sistema o link "Acessar" está esticado por baixo:
+                // o clique para aqui em vez de virar navegação.
+                e.preventDefault();
+                e.stopPropagation();
+                abrir(g);
+            });
+        });
+
+        scrim.addEventListener('click', fechar);
+        if (btFechar) btFechar.addEventListener('click', fechar);
+        if (btMais)   btMais.addEventListener('click',  function () { mudarZoom(1); });
+        if (btMenos)  btMenos.addEventListener('click', function () { mudarZoom(-1); });
+        area.addEventListener('scroll', aoRolar, { passive: true });
+
+        // Nem menu de contexto, nem arrastar a página para fora do navegador.
+        vw.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+        vw.addEventListener('dragstart',   function (e) { e.preventDefault(); });
+
+        document.addEventListener('keydown', function (e) {
+            if (!aberto) return;
+
+            if (e.key === 'Escape') { e.preventDefault(); fechar(); return; }
+            if (e.key === '+' || e.key === '=') { e.preventDefault(); mudarZoom(1);  return; }
+            if (e.key === '-' || e.key === '_') { e.preventDefault(); mudarZoom(-1); return; }
+
+            // Salvar e imprimir são as saídas de download que o teclado ainda
+            // oferece com o visualizador aberto.
+            if ((e.ctrlKey || e.metaKey) &&
+                (e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P')) {
+                e.preventDefault();
+                return;
+            }
+
+            // Foco preso: o Tab circula entre os controles do visualizador.
+            if (e.key !== 'Tab') return;
+            var focaveis = vw.querySelectorAll('button:not([disabled])');
+            if (!focaveis.length) return;
+            var primeiro = focaveis[0];
+            var ultimo   = focaveis[focaveis.length - 1];
+            if (e.shiftKey && document.activeElement === primeiro) {
+                e.preventDefault(); ultimo.focus();
+            } else if (!e.shiftKey && document.activeElement === ultimo) {
+                e.preventDefault(); primeiro.focus();
+            }
+        });
+    })();
+
 })();
