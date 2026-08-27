@@ -518,6 +518,13 @@ a.card:hover .card-go { color: var(--accent-dark); }
 .card-sys .card-go:hover { color: var(--accent-dark); }
 .card-sys .card-go:hover .i-arrow { transform: translateX(4px); }
 
+/* Crédito de autoria: observação discreta no pé do card, abaixo do rodapé.
+   Fica sob a camada clicável do "Acessar" — é só texto, não precisa de clique. */
+.card-cred {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+    font-size: .7rem; color: var(--text-faint); letter-spacing: .01em;
+}
+
 /* Discreto e na outra ponta do rodapé: é o caminho secundário do card.
    O margin-right:auto empurra só o informativo para a esquerda — "Acessar"
    continua onde está, na direita. */
