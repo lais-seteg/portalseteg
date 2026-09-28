@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Portal SETEG · Sistemas e Solicitações</title>
-    <meta name="description" content="Portal interno da SETEG: sistemas de solicitação, sistemas integrados, avaliações, políticas e canais de suporte em um só lugar.">
+    <meta name="description" content="Portal interno da SETEG: sistemas de solicitação, sistemas integrados, políticas e canais de suporte em um só lugar.">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,6 @@
             <a href="#home"       class="nav-link is-active" data-spy="home">Início</a>
             <a href="#systems"    class="nav-link" data-spy="systems">Sistemas</a>
             <a href="#integrados" class="nav-link" data-spy="integrados">Integrados</a>
-            <a href="#avaliacoes" class="nav-link" data-spy="avaliacoes">Avaliações</a>
             <a href="#policies"   class="nav-link" data-spy="policies">Políticas</a>
             <a href="#support"    class="nav-link" data-spy="support">Suporte</a>
         </nav>
@@ -51,7 +50,6 @@
     <a href="#home"       class="mnav-link" data-spy="home">Início</a>
     <a href="#systems"    class="mnav-link" data-spy="systems">Sistemas</a>
     <a href="#integrados" class="mnav-link" data-spy="integrados">Integrados</a>
-    <a href="#avaliacoes" class="mnav-link" data-spy="avaliacoes">Avaliações</a>
     <a href="#policies"   class="mnav-link" data-spy="policies">Políticas</a>
     <a href="#support"    class="mnav-link" data-spy="support">Suporte</a>
 </nav>
@@ -64,7 +62,7 @@
             <div class="hero-copy">
                 <span class="badge"><span class="badge-dot" aria-hidden="true"></span> Portal interno SETEG</span>
                 <h1 class="hero-title">Todos os sistemas da SETEG em um só lugar.</h1>
-                <p class="hero-sub">Acesso às solicitações, sistemas, avaliações, manuais e canais de suporte em uma única plataforma.</p>
+                <p class="hero-sub">Acesso às solicitações, sistemas, manuais e canais de suporte em uma única plataforma.</p>
                 <div class="hero-actions">
                     <a href="#systems" class="btn btn-primary">
                         Acessar sistemas
@@ -157,7 +155,7 @@
                         <dl class="eco-stats">
                             <div class="eco-stat is-lead">
                                 <dt>Sistemas próprios</dt>
-                                <dd><b data-count="11">11</b></dd>
+                                <dd><b data-count="12">12</b></dd>
                             </div>
                             <div class="eco-stat">
                                 <dt>Sistemas integrados</dt>
@@ -288,6 +286,19 @@
                 </article>
 
                 <article class="card card-sys reveal">
+                    <span class="card-ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+                    <h3 class="card-title">NPS e ISC</h3>
+                    <p class="card-desc">Indicadores de satisfação e NPS da SETEG</p>
+                    <span class="card-foot">
+                        <button type="button" class="card-inf" data-inf="nps" data-inf-title="NPS e ISC" data-inf-pages="4">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Informativo
+                        </button>
+                        <a class="card-go" href="https://nps.setegce.com" target="_blank" rel="noopener noreferrer">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                    </span>
+                    <p class="card-cred">Desenvolvido por Laís Mendes</p>
+                </article>
+
+                <article class="card card-sys reveal">
                     <span class="card-ico c-purple" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".6"/><circle cx="17.5" cy="10.5" r=".6"/><circle cx="8.5" cy="7.5" r=".6"/><circle cx="6.5" cy="12.5" r=".6"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688"/></svg></span>
                     <h3 class="card-title">Peças Gráficas</h3>
                     <p class="card-desc">Artes, banners e materiais visuais</p>
@@ -403,33 +414,8 @@
         </div>
     </section>
 
-    <!-- ═══════════════════ AVALIAÇÕES ═══════════════════ -->
-    <section class="sec" id="avaliacoes">
-        <div class="wrap">
-            <header class="sec-head">
-                <span class="eyebrow">Indicadores</span>
-                <h2 class="sec-title">Avaliações</h2>
-                <p class="sec-sub">Acompanhe a percepção de quem é atendido pela SETEG.</p>
-            </header>
-
-            <div class="cards">
-                <article class="card card-sys reveal">
-                    <span class="card-ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-                    <h3 class="card-title">Dashboard de Avaliação</h3>
-                    <p class="card-desc">Indicadores de satisfação e NPS da SETEG</p>
-                    <span class="card-foot">
-                        <button type="button" class="card-inf" data-inf="nps" data-inf-title="Dashboard NPS" data-inf-pages="4">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Informativo
-                        </button>
-                        <a class="card-go" href="https://nps-dashboard-indol.vercel.app/" target="_blank" rel="noopener noreferrer">Acessar <svg class="i-arrow" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-                    </span>
-                </article>
-            </div>
-        </div>
-    </section>
-
     <!-- ═══════════════════ POLÍTICAS ═══════════════════ -->
-    <section class="sec sec-alt" id="policies">
+    <section class="sec" id="policies">
         <div class="wrap">
             <header class="sec-head">
                 <span class="eyebrow">Documentação</span>
@@ -461,7 +447,7 @@
     </section>
 
     <!-- ═══════════════════ SUPORTE ═══════════════════ -->
-    <section class="sec" id="support">
+    <section class="sec sec-alt" id="support">
         <div class="wrap">
             <header class="sec-head">
                 <span class="eyebrow">Atendimento</span>
@@ -588,7 +574,6 @@
             <a href="#home">Início</a>
             <a href="#systems">Sistemas</a>
             <a href="#integrados">Integrados</a>
-            <a href="#avaliacoes">Avaliações</a>
             <a href="#policies">Políticas</a>
             <a href="#support">Suporte</a>
         </nav>
